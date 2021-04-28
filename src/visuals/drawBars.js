@@ -1,9 +1,9 @@
 export default (functionContext) => {
     let { data, options, ctx, h, w } = functionContext;
 
-    let point_count = 64;
+    let point_count = options.point_count || 64;
     let percent = h / 255;
-    let increase = w / 64;
+    let increase = w / point_count;
     let breakpoint = Math.floor(point_count / options.colors.length);
 
     for (let point = 1; point <= point_count; point++) {

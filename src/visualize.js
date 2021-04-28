@@ -21,8 +21,17 @@ import drawWeb from "./visuals/drawWeb.js"
 import drawStitches from "./visuals/drawStitches.js"
 import drawRoundLayers from "./visuals/drawRoundLayers.js"
 
-//options:type,colors,stroke
+
+// @params options {Object} 
+// options can have several properties which affect the visualization:
+// * type {String|Function} Can be a string that refers to the precreated visualizers or can be a function for the visualizer
+// * colors {Array||null} can be an array of hex color values (eg #d92027) or common color names. will default to ["#d92027", "#ff9234", "#ffcd3c", "#35d0ba"]
+// * stroke {Integer} the width of the strokes 
+// * frameRate {Integer} determines if the current frame should be drawn via modulus
+// * height {Integer} alternative height of the visualization (defaults to canvas height)
+// * width {Integer} alternative width of the visualization (defaults to canvas width)
 export default function visualize(data, canvasId, options = {}, frame) {
+
     //make a clone of options
     options = { ...options }
     //options
@@ -35,10 +44,8 @@ export default function visualize(data, canvasId, options = {}, frame) {
     if (!canvas) return;
 
     let ctx = canvas.getContext("2d");
-    let h = canvas.height;
-    let w = canvas.width;
-
-
+    let h = options.height || canvas.height;
+    let w = options.width || canvas.width;
 
     ctx.strokeStyle = options.colors[0];
     ctx.lineWidth = options.stroke;
@@ -97,16 +104,23 @@ export default function visualize(data, canvasId, options = {}, frame) {
         data, options, ctx, h, w, Helper: this.Helper, canvasId
     }
 
-    if (typeof options.type == "string") options.type = [options.type]
+    if (["string", "function"].includes(typeof options.type)) options.type = [options.type]
 
     options.type.forEach(type => {
+
+        let frameRate = options.frameRate || frameRateMap[type] || 1;
+
+        let drawFunction = type;
+
+        if (typeof type == "string") drawFunction = typeMap[type]
+
         //abide by the frame rate
-        if (frame % frameRateMap[type] === 0) {
+        if (frame % frameRate === 0) {
             //clear canvas
             ctx.clearRect(0, 0, w, h);
             ctx.beginPath();
 
-            typeMap[type](functionContext)
+            drawFunction(functionContext);
         }
     })
 
