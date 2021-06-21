@@ -1,5 +1,7 @@
 'use strict';
 
+// an id to the element can be passed in. alternatively, a Audio instance can be passed in
+// through options
 function fromElement(element_id, canvas_id, options) {
     const globalAccessKey = [options.globalAccessKey || '$wave'];
     const initGlobalObject = (elementId) => {
@@ -22,7 +24,15 @@ function fromElement(element_id, canvas_id, options) {
     };
 
     const waveContext = this;
-    let element = document.getElementById(element_id);
+
+    let element;
+
+    if (options['element']) {
+        element = options['element'];
+    } else {
+        element = document.getElementById(element_id);
+    }
+
     if (!element) return
     element.crossOrigin = "anonymous";
 

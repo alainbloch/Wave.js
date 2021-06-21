@@ -23,10 +23,12 @@ export default function fromElement(element_id, canvas_id, options) {
 
     const waveContext = this;
 
+    let element;
+
     if (options['element']) {
-        let element = options['element']
+        element = options['element']
     } else {
-        let element = document.getElementById(element_id);
+        element = document.getElementById(element_id);
     }
 
     if (!element) return
