@@ -1,6 +1,7 @@
 import fromElement from "./fromElement.js";
 import fromFile from "./fromFile.js";
 import fromStream from "./fromStream.js";
+import fromAnalyser from "./fromAnalyser.js";
 import visualize from "./visualize.js";
 import Helper from "./helper.js";
 
@@ -20,6 +21,7 @@ Wave.prototype = {
     fromElement,
     fromFile,
     ...fromStream,
+    ...fromAnalyser,
     visualize,
     Helper
 }
